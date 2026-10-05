@@ -1,0 +1,213 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Lyria Health palette — quiet, clinical, premium ─────────────── */
+  --color-cream: #f3efe6;
+  --color-paper: #faf8f2;
+  --color-sand: #e7e1d1;
+  --color-ink: #0e1a14;
+  --color-forest: #0c2920;
+  --color-pine: #154434;
+  --color-moss: #1c5b47;
+  --color-sage: #8faf9d;
+  --color-mist: #dde7de;
+  --color-gold: #c6a367;
+
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+
+  --ease-out-expo: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-marquee: marquee 38s linear infinite;
+  --animate-pulse-dot: pulse-dot 2.4s ease-in-out infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes pulse-dot {
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.45;
+      transform: scale(0.72);
+    }
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5.5rem;
+}
+
+body {
+  background: var(--color-cream);
+  color: var(--color-ink);
+  font-feature-settings: "ss01", "cv05";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: var(--color-pine);
+  color: var(--color-cream);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-pine);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+/* Dark contexts (footer / CTA band) — focus ring must stay visible */
+.on-dark :focus-visible,
+.on-dark:focus-visible {
+  outline-color: var(--color-sage);
+}
+
+/* Skip link — WCAG 2.2 */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  background: var(--color-forest);
+  color: var(--color-cream);
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  transition: top 0.2s var(--ease-out-expo);
+}
+.skip-link:focus-visible {
+  top: 1rem;
+}
+
+/* ── Scroll reveals ────────────────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(26px);
+  transition:
+    opacity 1s var(--ease-out-expo),
+    transform 1s var(--ease-out-expo);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+.reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+
+/* ── Marquee ───────────────────────────────────────────────────────── */
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: var(--animate-marquee);
+}
+
+/* ── Link sweep ────────────────────────────────────────────────────── */
+.u-sweep {
+  background-image: linear-gradient(currentColor, currentColor);
+  background-size: 0% 1px;
+  background-position: 0 100%;
+  background-repeat: no-repeat;
+  transition: background-size 0.45s var(--ease-out-expo);
+}
+.u-sweep:hover {
+  background-size: 100% 1px;
+}
+
+/* ── Buttons ───────────────────────────────────────────────────────── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  border-radius: 999px;
+  font-weight: 550;
+  letter-spacing: 0.01em;
+  transition:
+    transform 0.5s var(--ease-out-expo),
+    background-color 0.35s ease,
+    color 0.35s ease,
+    border-color 0.35s ease,
+    box-shadow 0.5s var(--ease-out-expo);
+}
+.btn:active {
+  transform: scale(0.975);
+}
+.btn-primary {
+  background: var(--color-forest);
+  color: var(--color-cream);
+}
+.btn-primary:hover {
+  background: var(--color-pine);
+  transform: translateY(-2px);
+  box-shadow: 0 18px 40px -18px rgba(12, 41, 32, 0.55);
+}
+.btn-ghost {
+  border: 1px solid color-mix(in srgb, var(--color-ink) 24%, transparent);
+  color: var(--color-ink);
+}
+.btn-ghost:hover {
+  border-color: var(--color-ink);
+  transform: translateY(-2px);
+}
+.btn-light {
+  background: var(--color-cream);
+  color: var(--color-forest);
+}
+.btn-light:hover {
+  background: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 18px 42px -18px rgba(0, 0, 0, 0.45);
+}
+
+/* ── Fine grain — barely-there texture ─────────────────────────────── */
+.grain::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.032;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Honeypot (must never be visible to humans, must be hidden from AT) */
+.hp-field {
+  position: absolute !important;
+  left: -9999px !important;
+  top: -9999px !important;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+/* ── Reduced motion — WCAG 2.2 ─────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .marquee-track {
+    animation: none;
+  }
+  .btn,
+  .btn:hover {
+    transform: none;
+    transition-duration: 0.01ms;
+  }
+}

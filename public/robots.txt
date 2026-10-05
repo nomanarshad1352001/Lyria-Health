@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+Disallow: /mailbox
+Disallow: /confirmed
+Disallow: /unsubscribed
+Disallow: /api/
+
+Sitemap: https://lyriahealth.co.uk/sitemap.xml
